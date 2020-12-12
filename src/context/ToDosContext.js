@@ -10,6 +10,7 @@ export const ToDosContextProvider = (props) => {
 
   // Almacenar los valores en el estado
   const [toDos, setToDos] = useState(initialToDos);
+  const [toDo, setToDo] = useState(""); //Obtener nota por ID
 
   // Cargar u obtener las tareas por hacer
   useEffect(() => {
@@ -20,14 +21,21 @@ export const ToDosContextProvider = (props) => {
     return database.getToDos(setToDos);
   };
 
-  const addNewToDo = (toDo) => {
-    return database.insertToDos(toDo, refreshToDos);
+  const addNewToDo = async (toDo) => {
+    await database.insertToDos(toDo, refreshToDos);
+    return refreshToDos();
+  };
+
+  const getToDoById = (id) => {
+    return database.getToDoById(id, setToDo);
   };
 
   // Crear el objeto de contexto
-  const notesContext = {
-    notes,
+  const toDosContext = {
+    toDos,
+    toDo,
     addNewToDo,
+    getToDoById
   };
 
   // Pasar los valores al proveedor y retornarlo
